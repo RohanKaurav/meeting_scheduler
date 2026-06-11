@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { processReminders } = require('./reminder');
+const { processReminders } = require('./jobs/reminders');
 
 function initScheduler() {
     console.log('[Scheduler] Initializing node-cron hourly reminder job...');
