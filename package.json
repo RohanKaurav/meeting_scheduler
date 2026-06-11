@@ -9,8 +9,6 @@
     "dependencies": {
       "@prisma/client": "^5.0.0",
       "node-cron": "^3.0.0",
-      "prisma": "^5.0.0",
-    "@prisma/adapter-pg": "^5.0.0",
-    "pg": "^8.0.0"
+      "prisma": "^5.0.0"
     }
   }
