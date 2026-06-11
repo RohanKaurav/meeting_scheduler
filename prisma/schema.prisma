@@ -1,0 +1,62 @@
+datasource db {
+    provider = "postgresql"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+enum Status {
+    PENDING
+    IN_PROGRESS
+    COMPLETED
+}
+
+model Meeting {
+    id           String            @id @default(uuid())
+    title        String
+    participants String[]
+    meetingDate  DateTime
+    transcript   Json
+    createdAt    DateTime          @default(now())
+
+    //relations
+    actionItems  ActionItem[]
+    analysis     MeetingAnalysis?
+}
+
+model ActionItem {
+    id        String      @id @default(uuid())
+    meetingId String
+    task      String
+    assignee  String
+    status    Status      @default(PENDING)
+    dueDate   DateTime
+    citations Json
+    createdAt DateTime    @default(now())
+
+    meeting   Meeting     @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+    reminders ReminderLog[]
+}
+
+model MeetingAnalysis {
+    id        String   @id @default(uuid())
+    meetingId String   @unique
+    summary   Json
+    decisions Json
+    followUps Json
+    createdAt DateTime @default(now())
+
+    meeting   Meeting  @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+}
+
+model ReminderLog {
+    id           String     @id @default(uuid())
+    actionItemId String
+    sentAt       DateTime   @default(now())
+    channel      String
+    success      Boolean
+    message      String
+
+    actionItem   ActionItem @relation(fields: [actionItemId], references: [id], onDelete: Cascade)
+}
